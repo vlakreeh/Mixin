@@ -215,6 +215,10 @@ processResources {
    from 'LICENSE.txt'
 }
 
+javadoc {
+    options.encoding = 'UTF-8'
+}
+
 // License header formatting
 license {
     ext {
