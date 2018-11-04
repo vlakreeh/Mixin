@@ -22,9 +22,14 @@ apply plugin: 'com.github.johnrengelman.shadow'
 defaultTasks 'licenseFormat', 'check', 'build'
 
 // Basic project information
-group = 'org.spongepowered'
-archivesBaseName = 'mixin'
-version = buildVersion + (buildType == 'RELEASE' ? '' : "-$buildType")
+group = 'net.fabricmc'
+archivesBaseName = 'sponge-mixin'
+version = buildVersion
+
+def ENV = System.getenv()
+if (ENV.BUILD_NUMBER) {
+    version = version + "." + "${ENV.BUILD_NUMBER}"
+}
 
 // Extended project information
 ext.projectName = 'Mixin'
@@ -423,9 +428,9 @@ uploadArchives {
         mavenDeployer {
             configuration = configurations.deployerJars
 
-            if (project.hasProperty("chRepo")) {
-                repository(url: project.chRepo) {
-                    authentication(userName: project.chUsername, password: project.chPassword)
+            if (project.hasProperty("mavenPass")) {
+                repository(url: "http://mavenupload.modmuss50.me/") {
+                    authentication(userName: "buildslave", password: project.getProperty('mavenPass'))
                 }
             }
 
