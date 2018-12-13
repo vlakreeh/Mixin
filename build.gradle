@@ -63,9 +63,8 @@ repositories {
         url = file(renamedPackageRoot)
     }
     maven {
-        // For fernflower
-        name = 'sponge'
-        url = 'http://repo.spongepowered.org/maven'
+        name = 'Fabric'
+        url = 'http://maven.fabricmc.net/'
     }
 }
 
@@ -179,7 +178,7 @@ dependencies {
 
     // Fernflower decompiler
     fernflowerCompile configurations.compile
-    fernflowerCompile 'org.jetbrains.java.decompiler:fernflower:sponge-SNAPSHOT'
+    fernflowerCompile 'org.jetbrains:intellij-fernflower:1.0.0.2'
 
     // LegacyLauncher service
     launchwrapperCompile configurations.compile
