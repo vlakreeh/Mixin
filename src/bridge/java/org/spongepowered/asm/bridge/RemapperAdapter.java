@@ -91,7 +91,8 @@ public abstract class RemapperAdapter implements IRemapper, IClassRemapper {
     
     @Override
     public String unmapDesc(String desc) {
-        return ObfuscationUtil.unmapDescriptor(desc, this);
+        String newDesc = ObfuscationUtil.unmapDescriptor(desc, this);
+        return newDesc != null ? newDesc : desc;
     }
 
 }

@@ -216,7 +216,7 @@ public final class ReferenceMapper implements IReferenceMapper, Serializable {
      * @return replaced value, per the contract of {@link Map#put}
      */
     public String addMapping(String context, String className, String reference, String newReference) {
-        if (this.readOnly || reference == null || newReference == null || reference.equals(newReference)) {
+        if (this.readOnly || reference == null || newReference == null) {
             return null;
         }
         Map<String, Map<String, String>> mappings = this.mappings;
