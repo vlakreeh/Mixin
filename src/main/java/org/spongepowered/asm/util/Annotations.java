@@ -30,11 +30,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 
-import org.objectweb.asm.Type;
-import org.objectweb.asm.tree.AnnotationNode;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.FieldNode;
-import org.objectweb.asm.tree.MethodNode;
+import org.spongepowered.asm.lib.Type;
+import org.spongepowered.asm.lib.tree.AnnotationNode;
+import org.spongepowered.asm.lib.tree.ClassNode;
+import org.spongepowered.asm.lib.tree.FieldNode;
+import org.spongepowered.asm.lib.tree.MethodNode;
 
 import com.google.common.base.Function;
 import com.google.common.base.Preconditions;

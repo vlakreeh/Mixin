@@ -36,14 +36,14 @@ import java.util.Set;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.tree.AnnotationNode;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.FieldNode;
-import org.objectweb.asm.tree.InnerClassNode;
-import org.objectweb.asm.tree.MethodNode;
+import org.spongepowered.asm.lib.ClassReader;
+import org.spongepowered.asm.lib.MethodVisitor;
+import org.spongepowered.asm.lib.Opcodes;
+import org.spongepowered.asm.lib.tree.AnnotationNode;
+import org.spongepowered.asm.lib.tree.ClassNode;
+import org.spongepowered.asm.lib.tree.FieldNode;
+import org.spongepowered.asm.lib.tree.InnerClassNode;
+import org.spongepowered.asm.lib.tree.MethodNode;
 import org.spongepowered.asm.mixin.Implements;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.MixinEnvironment;
@@ -849,13 +849,13 @@ class MixinInfo implements Comparable<MixinInfo>, IMixinInfo {
         }
         
         List<ClassInfo> targets = new ArrayList<ClassInfo>();
-        List<org.objectweb.asm.Type> publicTargets = Annotations.getValue(mixin, "value");
+        List<org.spongepowered.asm.lib.Type> publicTargets = Annotations.getValue(mixin, "value");
         List<String> privateTargets = Annotations.getValue(mixin, "targets");
 
         if (publicTargets != null) {
-            this.readTargets(targets, Lists.transform(publicTargets, new Function<org.objectweb.asm.Type, String>() {
+            this.readTargets(targets, Lists.transform(publicTargets, new Function<org.spongepowered.asm.lib.Type, String>() {
                 @Override
-                public String apply(org.objectweb.asm.Type input) {
+                public String apply(org.spongepowered.asm.lib.Type input) {
                     return input.getClassName();
                 }
             }), suppressPlugin, false);

@@ -36,7 +36,7 @@ public class MixinServiceLaunchWrapperBootstrap implements IMixinServiceBootstra
     private static final String SERVICE_PACKAGE = "org.spongepowered.asm.service.";
     
     private static final String MIXIN_UTIL_PACKAGE = "org.spongepowered.asm.util.";
-    private static final String ASM_PACKAGE = "org.objectweb.asm.";
+    private static final String ASM_PACKAGE = "org.spongepowered.asm.lib.";
     private static final String MIXIN_PACKAGE = "org.spongepowered.asm.mixin.";
 
     @Override

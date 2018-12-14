@@ -35,11 +35,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.signature.SignatureReader;
-import org.objectweb.asm.signature.SignatureVisitor;
-import org.objectweb.asm.signature.SignatureWriter;
-import org.objectweb.asm.tree.ClassNode;
+import org.spongepowered.asm.lib.Opcodes;
+import org.spongepowered.asm.lib.signature.SignatureReader;
+import org.spongepowered.asm.lib.signature.SignatureVisitor;
+import org.spongepowered.asm.lib.signature.SignatureWriter;
+import org.spongepowered.asm.lib.tree.ClassNode;
 
 /**
  * Represents an object-oriented view of a generic class signature. We use ASM's

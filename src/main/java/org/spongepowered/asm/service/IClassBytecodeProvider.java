@@ -26,7 +26,7 @@ package org.spongepowered.asm.service;
 
 import java.io.IOException;
 
-import org.objectweb.asm.tree.ClassNode;
+import org.spongepowered.asm.lib.tree.ClassNode;
 
 /**
  * Interface for object which can provide class bytecode

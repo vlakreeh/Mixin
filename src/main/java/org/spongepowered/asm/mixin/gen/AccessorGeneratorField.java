@@ -24,9 +24,9 @@
  */
 package org.spongepowered.asm.mixin.gen;
 
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.Type;
-import org.objectweb.asm.tree.FieldNode;
+import org.spongepowered.asm.lib.Opcodes;
+import org.spongepowered.asm.lib.Type;
+import org.spongepowered.asm.lib.tree.FieldNode;
 
 /**
  * Accessor generator for field accessors

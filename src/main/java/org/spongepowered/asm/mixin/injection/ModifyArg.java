@@ -92,7 +92,7 @@ public @interface ModifyArg {
     /**
      * An {@link At} annotation which describes the {@link InjectionPoint} in
      * the target method. The specified {@link InjectionPoint} <i>must only</i>
-     * return {@link org.objectweb.asm.tree.MethodInsnNode} instances
+     * return {@link org.spongepowered.asm.lib.tree.MethodInsnNode} instances
      * and an exception will be thrown if this is not the case.
      * 
      * @return {@link At} which identifies the target method invocation

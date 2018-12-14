@@ -31,10 +31,10 @@ import java.util.NoSuchElementException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.AnnotationNode;
-import org.objectweb.asm.tree.InsnList;
-import org.objectweb.asm.tree.MethodNode;
+import org.spongepowered.asm.lib.tree.AbstractInsnNode;
+import org.spongepowered.asm.lib.tree.AnnotationNode;
+import org.spongepowered.asm.lib.tree.InsnList;
+import org.spongepowered.asm.lib.tree.MethodNode;
 import org.spongepowered.asm.mixin.MixinEnvironment.Option;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.InjectionPoint;
@@ -255,7 +255,7 @@ public final class MethodSlice {
 
         /* (non-Javadoc)
          * @see org.spongepowered.asm.mixin.injection.code.ReadOnlyInsnList
-         *      #contains(org.objectweb.asm.tree.AbstractInsnNode)
+         *      #contains(org.spongepowered.asm.lib.tree.AbstractInsnNode)
          */
         @Override
         public boolean contains(AbstractInsnNode insn) {

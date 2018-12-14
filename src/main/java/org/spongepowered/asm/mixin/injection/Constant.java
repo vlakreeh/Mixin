@@ -27,7 +27,7 @@ package org.spongepowered.asm.mixin.injection;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import org.objectweb.asm.Opcodes;
+import org.spongepowered.asm.lib.Opcodes;
 
 /**
  * Annotation for specifying the injection point for an {@link ModifyConstant}

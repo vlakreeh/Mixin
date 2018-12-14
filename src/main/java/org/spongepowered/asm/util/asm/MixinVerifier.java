@@ -26,8 +26,8 @@ package org.spongepowered.asm.util.asm;
 
 import java.util.List;
 
-import org.objectweb.asm.Type;
-import org.objectweb.asm.tree.analysis.SimpleVerifier;
+import org.spongepowered.asm.lib.Type;
+import org.spongepowered.asm.lib.tree.analysis.SimpleVerifier;
 import org.spongepowered.asm.mixin.transformer.ClassInfo;
 
 /**
