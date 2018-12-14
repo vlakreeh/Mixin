@@ -74,7 +74,11 @@ configurations {
     jarjar // renamer task
     
     // Exclude non-repackaged ASM so that we don't use it by mistake
-    compile.exclude module: 'asm-debug-all'
+    compile.exclude module: 'asm'
+    compile.exclude module: 'asm-analysis'
+    compile.exclude module: 'asm-commons'
+    compile.exclude module: 'asm-tree'
+    compile.exclude module: 'asm-util'
 }
 
 // Include annotation processor sourceSet
@@ -444,7 +448,11 @@ ext.excludePomDeps = [
     'hamcrest-library',
     'junit',
     'mockito-core',
-    'mixin-asm-debug-all',
+    'mixin-asm',
+    'mixin-asm-analysis',
+    'mixin-asm-commons',
+    'mixin-asm-tree',
+    'mixin-asm-util',
     'log4j-core'
 ]
 
