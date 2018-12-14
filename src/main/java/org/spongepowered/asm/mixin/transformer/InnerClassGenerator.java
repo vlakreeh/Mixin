@@ -31,13 +31,13 @@ import java.util.UUID;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.spongepowered.asm.lib.AnnotationVisitor;
-import org.spongepowered.asm.lib.ClassReader;
-import org.spongepowered.asm.lib.ClassVisitor;
-import org.spongepowered.asm.lib.ClassWriter;
-import org.spongepowered.asm.lib.Opcodes;
-import org.spongepowered.asm.lib.commons.Remapper;
-import org.spongepowered.asm.lib.commons.ClassRemapper;
+import org.objectweb.asm.AnnotationVisitor;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.commons.Remapper;
+import org.objectweb.asm.commons.ClassRemapper;
 import org.spongepowered.asm.mixin.transformer.ClassInfo.Method;
 import org.spongepowered.asm.mixin.transformer.ext.IClassGenerator;
 import org.spongepowered.asm.mixin.transformer.throwables.InvalidMixinException;
@@ -139,7 +139,7 @@ final class InnerClassGenerator implements IClassGenerator {
         }
 
         /* (non-Javadoc)
-         * @see org.spongepowered.asm.lib.commons.Remapper#map(java.lang.String)
+         * @see org.objectweb.asm.commons.Remapper#map(java.lang.String)
          */
         @Override
         public String map(String key) {
@@ -175,7 +175,7 @@ final class InnerClassGenerator implements IClassGenerator {
         }
         
         /* (non-Javadoc)
-         * @see org.spongepowered.asm.lib.ClassVisitor
+         * @see org.objectweb.asm.ClassVisitor
          *      #visitSource(java.lang.String, java.lang.String)
          */
         @Override
@@ -188,7 +188,7 @@ final class InnerClassGenerator implements IClassGenerator {
         }
         
         /* (non-Javadoc)
-         * @see org.spongepowered.asm.lib.commons.RemappingClassAdapter
+         * @see org.objectweb.asm.commons.RemappingClassAdapter
          *      #visitInnerClass(java.lang.String, java.lang.String,
          *      java.lang.String, int)
          */

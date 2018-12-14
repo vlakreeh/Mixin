@@ -24,8 +24,8 @@
  */
 package org.spongepowered.asm.util.asm;
 
-import org.spongepowered.asm.lib.MethodVisitor;
-import org.spongepowered.asm.lib.Opcodes;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.util.Bytecode;
 
 /**

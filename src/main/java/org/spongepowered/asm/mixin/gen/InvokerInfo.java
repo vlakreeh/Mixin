@@ -24,8 +24,8 @@
  */
 package org.spongepowered.asm.mixin.gen;
 
-import org.spongepowered.asm.lib.Type;
-import org.spongepowered.asm.lib.tree.MethodNode;
+import org.objectweb.asm.Type;
+import org.objectweb.asm.tree.MethodNode;
 import org.spongepowered.asm.mixin.injection.struct.MemberInfo;
 import org.spongepowered.asm.mixin.transformer.MixinTargetContext;
 

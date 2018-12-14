@@ -24,7 +24,7 @@
  */
 package org.spongepowered.asm.mixin.injection.callback;
 
-import org.spongepowered.asm.lib.Type;
+import org.objectweb.asm.Type;
 import org.spongepowered.asm.util.Constants;
 
 /**

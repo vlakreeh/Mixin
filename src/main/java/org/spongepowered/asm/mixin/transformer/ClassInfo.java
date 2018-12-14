@@ -36,14 +36,14 @@ import java.util.Set;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.spongepowered.asm.lib.Opcodes;
-import org.spongepowered.asm.lib.tree.AbstractInsnNode;
-import org.spongepowered.asm.lib.tree.ClassNode;
-import org.spongepowered.asm.lib.tree.FieldInsnNode;
-import org.spongepowered.asm.lib.tree.FieldNode;
-import org.spongepowered.asm.lib.tree.FrameNode;
-import org.spongepowered.asm.lib.tree.MethodInsnNode;
-import org.spongepowered.asm.lib.tree.MethodNode;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldInsnNode;
+import org.objectweb.asm.tree.FieldNode;
+import org.objectweb.asm.tree.FrameNode;
+import org.objectweb.asm.tree.MethodInsnNode;
+import org.objectweb.asm.tree.MethodNode;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.MixinEnvironment;
 import org.spongepowered.asm.mixin.Mutable;
@@ -1697,10 +1697,10 @@ public final class ClassInfo {
      * @return ClassInfo for the supplied type or null if the supplied type
      *      cannot be found or is a primitive type
      */
-    public static ClassInfo forType(org.spongepowered.asm.lib.Type type) {
-        if (type.getSort() == org.spongepowered.asm.lib.Type.ARRAY) {
+    public static ClassInfo forType(org.objectweb.asm.Type type) {
+        if (type.getSort() == org.objectweb.asm.Type.ARRAY) {
             return ClassInfo.forType(type.getElementType());
-        } else if (type.getSort() < org.spongepowered.asm.lib.Type.ARRAY) {
+        } else if (type.getSort() < org.objectweb.asm.Type.ARRAY) {
             return null;
         }
         return ClassInfo.forName(type.getClassName().replace('.', '/'));
@@ -1729,9 +1729,9 @@ public final class ClassInfo {
      * @param type2 Second type
      * @return common superclass info
      */
-    public static ClassInfo getCommonSuperClass(org.spongepowered.asm.lib.Type type1, org.spongepowered.asm.lib.Type type2) {
+    public static ClassInfo getCommonSuperClass(org.objectweb.asm.Type type1, org.objectweb.asm.Type type2) {
         if (type1 == null || type2 == null
-                || type1.getSort() != org.spongepowered.asm.lib.Type.OBJECT || type2.getSort() != org.spongepowered.asm.lib.Type.OBJECT) {
+                || type1.getSort() != org.objectweb.asm.Type.OBJECT || type2.getSort() != org.objectweb.asm.Type.OBJECT) {
             return ClassInfo.OBJECT;
         }
         return ClassInfo.getCommonSuperClass(ClassInfo.forType(type1), ClassInfo.forType(type2));
@@ -1772,9 +1772,9 @@ public final class ClassInfo {
      * @param type2 Second type
      * @return common superclass info
      */
-    public static ClassInfo getCommonSuperClassOrInterface(org.spongepowered.asm.lib.Type type1, org.spongepowered.asm.lib.Type type2) {
+    public static ClassInfo getCommonSuperClassOrInterface(org.objectweb.asm.Type type1, org.objectweb.asm.Type type2) {
         if (type1 == null || type2 == null
-                || type1.getSort() != org.spongepowered.asm.lib.Type.OBJECT || type2.getSort() != org.spongepowered.asm.lib.Type.OBJECT) {
+                || type1.getSort() != org.objectweb.asm.Type.OBJECT || type2.getSort() != org.objectweb.asm.Type.OBJECT) {
             return ClassInfo.OBJECT;
         }
         return ClassInfo.getCommonSuperClassOrInterface(ClassInfo.forType(type1), ClassInfo.forType(type2));

@@ -29,9 +29,9 @@ import java.util.ListIterator;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.spongepowered.asm.lib.tree.AbstractInsnNode;
-import org.spongepowered.asm.lib.tree.InsnList;
-import org.spongepowered.asm.lib.tree.MethodInsnNode;
+import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.InsnList;
+import org.objectweb.asm.tree.MethodInsnNode;
 import org.spongepowered.asm.mixin.MixinEnvironment.Option;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.InjectionPoint;
@@ -146,7 +146,7 @@ public class BeforeInvoke extends InjectionPoint {
 
     /* (non-Javadoc)
      * @see org.spongepowered.asm.mixin.injection.InjectionPoint
-     *      #find(java.lang.String, org.spongepowered.asm.lib.tree.InsnList,
+     *      #find(java.lang.String, org.objectweb.asm.tree.InsnList,
      *      java.util.Collection)
      */
     @Override

@@ -30,9 +30,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.spongepowered.asm.lib.Opcodes;
-import org.spongepowered.asm.lib.Type;
-import org.spongepowered.asm.lib.tree.*;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
+import org.objectweb.asm.tree.*;
 import org.spongepowered.asm.mixin.injection.Coerce;
 import org.spongepowered.asm.mixin.injection.InjectionPoint;
 import org.spongepowered.asm.mixin.injection.Surrogate;
@@ -383,7 +383,7 @@ public class CallbackInjector extends Injector {
     /* (non-Javadoc)
      * @see org.spongepowered.asm.mixin.injection.code.Injector#addTargetNode(
      *      org.spongepowered.asm.mixin.injection.struct.Target, java.util.List,
-     *      org.spongepowered.asm.lib.tree.AbstractInsnNode, java.util.Set)
+     *      org.objectweb.asm.tree.AbstractInsnNode, java.util.Set)
      */
     @Override
     protected void addTargetNode(Target target, List<InjectionNode> myNodes, AbstractInsnNode node, Set<InjectionPoint> nominators) {

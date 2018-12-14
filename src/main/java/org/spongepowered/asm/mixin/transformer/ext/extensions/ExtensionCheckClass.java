@@ -24,8 +24,8 @@
  */
 package org.spongepowered.asm.mixin.transformer.ext.extensions;
 
-import org.spongepowered.asm.lib.ClassWriter;
-import org.spongepowered.asm.lib.util.CheckClassAdapter;
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.util.CheckClassAdapter;
 import org.spongepowered.asm.mixin.MixinEnvironment;
 import org.spongepowered.asm.mixin.MixinEnvironment.Option;
 import org.spongepowered.asm.mixin.throwables.MixinException;

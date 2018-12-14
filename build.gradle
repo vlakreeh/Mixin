@@ -41,9 +41,6 @@ ext.buildNumber = project.hasProperty("buildNumber") ? buildNumber : '0'
 ext.ciSystem = project.hasProperty("ciSystem") ? ciSystem : 'unknown'
 ext.commit = project.hasProperty("commit") ? commit : 'unknown'
 
-// Location to store renamed packages
-ext.renamedPackageRoot = new File("build/renamed-packages/")
-
 // True to do jar signing task
 ext.doSignJar = project.hasProperty("keyStorePath")
 
@@ -59,10 +56,6 @@ repositories {
         url = 'https://libraries.minecraft.net/'
     }
     maven {
-        name = 'renamed-packages'
-        url = file(renamedPackageRoot)
-    }
-    maven {
         name = 'Fabric'
         url = 'http://maven.fabricmc.net/'
     }
@@ -70,11 +63,6 @@ repositories {
 
 configurations {
     deployerJars // maven stuff
-    asm // renamer input
-    jarjar // renamer task
-    
-    // Exclude non-repackaged ASM so that we don't use it by mistake
-    compile.exclude module: 'asm-debug-all'
 }
 
 // Include annotation processor sourceSet
@@ -100,57 +88,6 @@ sourceSets {
     }
 }
 
-// Dependencies for renamed ASM
-dependencies {
-    asm 'org.ow2.asm:asm-debug-all:5.2'
-    asm 'org.ow2.asm:asm-debug-all:5.2:sources'
-    jarjar 'com.googlecode.jarjar:jarjar:1.1'
-}
-
-// Task to read ASM library and rename packages
-task renamedASM {
-    outputs.file files(configurations.asm.files.withIndex().collect { file, i -> def dep = configurations.asm.dependencies[i]
-        new File(new File(renamedPackageRoot, "org/spongepowered/mixin-" + dep.name + "/" + dep.version), "mixin-" + file.name).path
-    })
-    ant {
-        taskdef (
-            name: "jarjar",
-            classname: "com.tonicsystems.jarjar.JarJarTask",
-            classpath: configurations.jarjar.asPath,
-        )
-        outputs.files.eachWithIndex { elem, index ->
-            logger.info "Generating renamed jar {}", elem.name
-            def inJar = configurations.asm.files[index]
-            if (elem.name.contains("sources")) {
-                def tmpDir = new File(temporaryDir, elem.name + ".tmp")
-                def rootOld = new File(tmpDir, "org/objectweb")
-                def tmpOld = new File(rootOld, "asm")
-                def tmpNew = new File(tmpDir, "org/spongepowered/asm/lib")
-                unzip (src: inJar, dest: tmpDir)
-                replace (dir: tmpDir, token: "org.objectweb.asm", value: "org.spongepowered.asm.lib")
-                move (file: tmpOld, tofile: tmpNew)
-                delete rootOld
-                jar (destFile: new File(elem.path)) { fileset(dir: tmpDir) }
-                delete tmpDir
-            } else {
-                jarjar (jarfile: elem.path) {
-                    zipfileset (src: inJar)
-                    rule (
-                        pattern: "org.objectweb.asm.**",
-                        result: "org.spongepowered.asm.lib.@1"
-                    )
-                }
-            }
-        }
-    }
-    
-    project.dependencies.add('compile', 'org.spongepowered:mixin-asm-debug-all:5.2')
-    project.dependencies.add('apCompile', 'org.spongepowered:mixin-asm-debug-all:5.2')
-    project.dependencies.add('agentCompile', 'org.spongepowered:mixin-asm-debug-all:5.2')
-
-}
-eclipseClasspath.dependsOn(renamedASM)
-
 // Project dependencies
 dependencies {
     def guava = 'com.google.guava:guava:17.0'
@@ -158,9 +95,13 @@ dependencies {
     
     compile guava
     compile log4j2
-    compile 'commons-io:commons-io:2.4'
-    compile 'com.google.code.gson:gson:2.2.4'
-    compile files(tasks.renamedASM.outputs.files[0])         // Establish implicit dependency on remapped ASM
+
+    compile 'org.ow2.asm:asm:7.0'
+    compile 'org.ow2.asm:asm-commons:7.0'
+    compile 'org.ow2.asm:asm-tree:7.0'
+    compile 'org.ow2.asm:asm-util:7.0'
+    compile 'commons-io:commons-io:2.5'
+    compile 'com.google.code.gson:gson:2.8.0'
 
     // Tests
 //    testCompile 'junit:junit:4.11'
@@ -169,6 +110,10 @@ dependencies {
     
     // Annotation Processor
     apCompile guava
+    apCompile 'org.ow2.asm:asm:7.0'
+    apCompile 'org.ow2.asm:asm-commons:7.0'
+    apCompile 'org.ow2.asm:asm-tree:7.0'
+    apCompile 'org.ow2.asm:asm-util:7.0'
     
     // AP extension example
     exampleCompile configurations.compile
@@ -182,7 +127,7 @@ dependencies {
 
     // LegacyLauncher service
     launchwrapperCompile configurations.compile
-    launchwrapperCompile('net.minecraft:launchwrapper:1.11') {
+    launchwrapperCompile('net.minecraft:launchwrapper:1.12') {
         exclude module: 'lwjgl'
     }
     
@@ -191,7 +136,7 @@ dependencies {
     
     // asm bridge
     bridgeCompile log4j2
-    bridgeCompile 'org.ow2.asm:asm-commons:5.0.3'
+    bridgeCompile 'org.ow2.asm:asm-commons:7.0'
 }
 
 // Eclipse
@@ -276,19 +221,6 @@ jar {
     // Launchwrapper
     from sourceSets.launchwrapper.output
     
-    // Renamed ASM
-    from zipTree(tasks.renamedASM.outputs.files[0]).matching {
-        include 'org/spongepowered/asm/lib/*'
-        include 'org/spongepowered/asm/lib/commons/*Remapper*'
-        include 'org/spongepowered/asm/lib/commons/Remapper*'
-        include 'org/spongepowered/asm/lib/commons/SignatureRemapper*'
-        include 'org/spongepowered/asm/lib/signature/**'
-        include 'org/spongepowered/asm/lib/tree/**'
-        include 'org/spongepowered/asm/lib/util/**'
-    }
-    
-    exclude 'org/objectweb/**'
-    
     // JAR manifest configuration
     manifest.mainAttributes(
         "Built-By": System.properties['user.name'],
@@ -310,19 +242,7 @@ jar {
 
 task thinJar(type: Jar) {
     from sourceSets.main.output
-    from zipTree(tasks.renamedASM.outputs.files[0])
     classifier = 'thin'
-    
-    exclude 'org/objectweb/**'
-    exclude 'org/spongepowered/asm/lib/commons/**'
-    exclude 'org/spongepowered/asm/lib/signature/**'
-    exclude 'org/spongepowered/asm/lib/tree/analysis/**'
-    exclude 'org/spongepowered/asm/lib/xml/**'
-    exclude 'org/spongepowered/asm/launch/**'
-    exclude 'org/spongepowered/asm/mixin/injection/invoke/**'
-    exclude 'org/spongepowered/asm/mixin/transformer/*.class'
-    exclude 'org/spongepowered/asm/mixin/transformer/debug/**'
-    exclude 'org/spongepowered/asm/mixin/transformer/verify/**'
     
     manifest.mainAttributes(
         "Built-By": System.properties['user.name'],

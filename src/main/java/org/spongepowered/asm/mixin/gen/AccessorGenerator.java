@@ -26,9 +26,9 @@ package org.spongepowered.asm.mixin.gen;
 
 import java.util.ArrayList;
 
-import org.spongepowered.asm.lib.Opcodes;
-import org.spongepowered.asm.lib.tree.AnnotationNode;
-import org.spongepowered.asm.lib.tree.MethodNode;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.tree.AnnotationNode;
+import org.objectweb.asm.tree.MethodNode;
 
 /**
  * Base class for accessor generators
