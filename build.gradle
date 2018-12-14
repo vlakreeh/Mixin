@@ -90,8 +90,8 @@ sourceSets {
 
 // Project dependencies
 dependencies {
-    def guava = 'com.google.guava:guava:17.0'
-    def log4j2 = 'org.apache.logging.log4j:log4j-core:2.0-beta9'
+    def guava = 'com.google.guava:guava:21.0'
+    def log4j2 = 'org.apache.logging.log4j:log4j-core:2.8.1'
     
     compile guava
     compile log4j2
@@ -128,7 +128,7 @@ dependencies {
     // LegacyLauncher service
     launchwrapperCompile configurations.compile
     launchwrapperCompile('net.minecraft:launchwrapper:1.12') {
-        exclude module: 'lwjgl'
+        transitive = false
     }
     
     // agent
