@@ -341,7 +341,7 @@ public final class Locals {
 
         // Use Analyzer to generate the bytecode frames
         Analyzer<BasicValue> analyzer = new Analyzer<BasicValue>(
-                new MixinVerifier(Type.getObjectType(classNode.name), objectType, interfaces, false));
+                new MixinVerifier(Opcodes.ASM5, Type.getObjectType(classNode.name), objectType, interfaces, false));
         try {
             analyzer.analyze(classNode.name, method);
         } catch (AnalyzerException ex) {

@@ -40,8 +40,8 @@ public class MixinVerifier extends SimpleVerifier {
     private List<Type> currentClassInterfaces;
     private boolean isInterface;
 
-    public MixinVerifier(Type currentClass, Type currentSuperClass, List<Type> currentClassInterfaces, boolean isInterface) {
-        super(currentClass, currentSuperClass, currentClassInterfaces, isInterface);
+    public MixinVerifier(int api, Type currentClass, Type currentSuperClass, List<Type> currentClassInterfaces, boolean isInterface) {
+        super(api, currentClass, currentSuperClass, currentClassInterfaces, isInterface);
         this.currentClass = currentClass;
         this.currentSuperClass = currentSuperClass;
         this.currentClassInterfaces = currentClassInterfaces;
