@@ -102,8 +102,11 @@ sourceSets {
 
 // Dependencies for renamed ASM
 dependencies {
-    asm 'org.ow2.asm:asm-debug-all:5.2'
-    asm 'org.ow2.asm:asm-debug-all:5.2:sources'
+    asm 'org.ow2.asm:asm:7.0'
+    asm 'org.ow2.asm:asm-analysis:7.0'
+    asm 'org.ow2.asm:asm-commons:7.0'
+    asm 'org.ow2.asm:asm-tree:7.0'
+    asm 'org.ow2.asm:asm-util:7.0'
     jarjar 'com.googlecode.jarjar:jarjar:1.1'
 }
 
@@ -144,9 +147,21 @@ task renamedASM {
         }
     }
     
-    project.dependencies.add('compile', 'org.spongepowered:mixin-asm-debug-all:5.2')
-    project.dependencies.add('apCompile', 'org.spongepowered:mixin-asm-debug-all:5.2')
-    project.dependencies.add('agentCompile', 'org.spongepowered:mixin-asm-debug-all:5.2')
+    project.dependencies.add('compile', 'org.spongepowered:mixin-asm:7.0')
+    project.dependencies.add('compile', 'org.spongepowered:mixin-asm-analysis:7.0')
+    project.dependencies.add('compile', 'org.spongepowered:mixin-asm-commons:7.0')
+    project.dependencies.add('compile', 'org.spongepowered:mixin-asm-tree:7.0')
+    project.dependencies.add('compile', 'org.spongepowered:mixin-asm-util:7.0')
+    project.dependencies.add('apCompile', 'org.spongepowered:mixin-asm:7.0')
+    project.dependencies.add('apCompile', 'org.spongepowered:mixin-asm-analysis:7.0')
+    project.dependencies.add('apCompile', 'org.spongepowered:mixin-asm-commons:7.0')
+    project.dependencies.add('apCompile', 'org.spongepowered:mixin-asm-tree:7.0')
+    project.dependencies.add('apCompile', 'org.spongepowered:mixin-asm-util:7.0')
+    project.dependencies.add('agentCompile', 'org.spongepowered:mixin-asm:7.0')
+    project.dependencies.add('agentCompile', 'org.spongepowered:mixin-asm-analysis:7.0')
+    project.dependencies.add('agentCompile', 'org.spongepowered:mixin-asm-commons:7.0')
+    project.dependencies.add('agentCompile', 'org.spongepowered:mixin-asm-tree:7.0')
+    project.dependencies.add('agentCompile', 'org.spongepowered:mixin-asm-util:7.0')
 
 }
 eclipseClasspath.dependsOn(renamedASM)
@@ -158,8 +173,8 @@ dependencies {
     
     compile guava
     compile log4j2
-    compile 'commons-io:commons-io:2.4'
-    compile 'com.google.code.gson:gson:2.2.4'
+    compile 'commons-io:commons-io:2.5'
+    compile 'com.google.code.gson:gson:2.8.0'
     compile files(tasks.renamedASM.outputs.files[0])         // Establish implicit dependency on remapped ASM
 
     // Tests
