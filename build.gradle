@@ -292,8 +292,8 @@ jar {
     // Bridge
     from sourceSets.bridge.output
     
-    // Launchwrapper
-    from sourceSets.launchwrapper.output
+    // Launchwrapper - no longer used - provided by Knot in Fabric!
+    // from sourceSets.launchwrapper.output
     
     // Renamed ASM
     from zipTree(tasks.renamedASM.outputs.files[0]).matching {
@@ -337,19 +337,26 @@ jar {
 
 task thinJar(type: Jar) {
     from sourceSets.main.output
-    from zipTree(tasks.renamedASM.outputs.files[0])
-    classifier = 'thin'
-    
-    exclude 'org/objectweb/**'
-    exclude 'org/spongepowered/asm/lib/commons/**'
-    exclude 'org/spongepowered/asm/lib/signature/**'
-    exclude 'org/spongepowered/asm/lib/tree/analysis/**'
-    exclude 'org/spongepowered/asm/lib/xml/**'
-    exclude 'org/spongepowered/asm/launch/**'
-    exclude 'org/spongepowered/asm/mixin/injection/invoke/**'
-    exclude 'org/spongepowered/asm/mixin/transformer/*.class'
-    exclude 'org/spongepowered/asm/mixin/transformer/debug/**'
-    exclude 'org/spongepowered/asm/mixin/transformer/verify/**'
+
+    from zipTree(tasks.renamedASM.outputs.files[0]).matching {
+        include 'org/spongepowered/asm/lib/**'
+    }
+    from zipTree(tasks.renamedASM.outputs.files[1]).matching {
+        include 'org/spongepowered/asm/lib/**'
+    }
+    from zipTree(tasks.renamedASM.outputs.files[2]).matching {
+        include 'org/spongepowered/asm/lib/commons/*Remapper*'
+        include 'org/spongepowered/asm/lib/commons/Remapper*'
+        include 'org/spongepowered/asm/lib/commons/SignatureRemapper*'
+    }
+    from zipTree(tasks.renamedASM.outputs.files[3]).matching {
+        include 'org/spongepowered/asm/lib/**'
+    }
+    from zipTree(tasks.renamedASM.outputs.files[4]).matching {
+        include 'org/spongepowered/asm/lib/**'
+    }
+
+    baseName = 'sponge-mixin-knot'
     
     manifest.mainAttributes(
         "Built-By": System.properties['user.name'],
