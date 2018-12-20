@@ -280,6 +280,8 @@ if (JavaVersion.current().isJava8Compatible()) {
 }
 
 jar {
+    classifier = 'full'
+
     // Include annotation processor
     from sourceSets.ap.output
     
@@ -356,8 +358,8 @@ task thinJar(type: Jar) {
         include 'org/spongepowered/asm/lib/**'
     }
 
-    baseName = 'sponge-mixin-knot'
-    
+    classifier = ''
+
     manifest.mainAttributes(
         "Built-By": System.properties['user.name'],
         "Created-By": System.properties['java.vm.version'] + " (" + System.properties['java.vm.vendor'] + ")",
@@ -382,7 +384,7 @@ shadowJar  {
     }
     classifier = 'processor'
 }
-build.dependsOn(shadowJar)
+// build.dependsOn(shadowJar)
 
 if (project.doSignJar) {
     // Clear artifacts because jar will be there by default
