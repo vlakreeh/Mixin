@@ -280,8 +280,6 @@ if (JavaVersion.current().isJava8Compatible()) {
 }
 
 jar {
-    classifier = 'full'
-
     // Include annotation processor
     from sourceSets.ap.output
     
@@ -337,7 +335,7 @@ jar {
     }
 }
 
-task thinJar(type: Jar) {
+/* task thinJar(type: Jar) {
     from sourceSets.main.output
 
     from zipTree(tasks.renamedASM.outputs.files[0]).matching {
@@ -368,7 +366,7 @@ task thinJar(type: Jar) {
         "Implementation-Vendor": url,
     )
 }
-build.dependsOn(thinJar)
+build.dependsOn(thinJar) */
 
 // generate shadow jar so we can use the AP standalone
 shadowJar  {
@@ -446,7 +444,7 @@ artifacts {
     if (project.doSignJar) {
         archives signJar.outputs.files[0]
     }
-    archives thinJar
+//    archives thinJar
     archives sourceJar
     archives javadocJar
 }
