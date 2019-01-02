@@ -147,7 +147,7 @@ public final class Locals {
 
         // Initialise implicit "this" reference in non-static methods
         if ((method.access & Opcodes.ACC_STATIC) == 0) {
-            frame[local++] = new LocalVariableNode("this", classNode.name, null, null, null, 0);
+            frame[local++] = new LocalVariableNode("this", Type.getObjectType(classNode.name).toString(), null, null, null, 0);
         }
         
         // Initialise method arguments

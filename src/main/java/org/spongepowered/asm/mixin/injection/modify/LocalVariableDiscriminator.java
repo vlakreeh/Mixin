@@ -147,7 +147,7 @@ public class LocalVariableDiscriminator {
             
             Local[] lvt = new Local[this.baseArgIndex + target.arguments.length];
             if (!this.isStatic) {
-                lvt[0] = new Local("this", Type.getType(target.classNode.name));
+                lvt[0] = new Local("this", Type.getObjectType(target.classNode.name));
             }
             for (int local = this.baseArgIndex; local < lvt.length; local++) {
                 Type arg = target.arguments[local - this.baseArgIndex];
