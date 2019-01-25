@@ -41,7 +41,7 @@ public class RemapperChain implements IRemapper {
     public String toString() {
         return String.format("RemapperChain[%d]", this.remappers.size());
     }
-    
+
     /**
      * Add a new remapper to this chain
      * 
