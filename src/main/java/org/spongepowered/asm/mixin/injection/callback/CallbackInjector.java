@@ -630,7 +630,7 @@ public class CallbackInjector extends Injector {
             return;
         }
         
-        callback.add(new InsnNode(Opcodes.DUP));
+        callback.add(new InsnNode(callback.target.returnType.getSize() >= 2 ? Opcodes.DUP2 : Opcodes.DUP));
         callback.add(new VarInsnNode(callback.target.returnType.getOpcode(Opcodes.ISTORE), callback.marshalVar()));
     }
 
