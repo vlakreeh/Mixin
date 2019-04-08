@@ -130,7 +130,7 @@ public final class RemappingReferenceMapper implements IReferenceMapper {
         return newDesc.append(')').append(remapper.mapDesc(Type.getReturnType(desc).getDescriptor())).toString();
     }
 
-    private String findFieldOwner(MemberInfo obfInfo) {
+    private String findFieldOwner(String className, MemberInfo obfInfo) {
         ClassInfo c = ClassInfo.forName(remapper.map(obfInfo.owner));
 
         while (c != null) {
@@ -156,9 +156,9 @@ public final class RemappingReferenceMapper implements IReferenceMapper {
     //
     // Will do for now, though. We'll see after Mixin 0.8 is out. ...Right?
 
-    private String findMethodOwner(MemberInfo obfInfo) {
+    private String findMethodOwner(String className, MemberInfo obfInfo) {
         LinkedList<ClassInfo> classInfos = new LinkedList<ClassInfo>();
-        classInfos.add(ClassInfo.forName(remapper.map(obfInfo.owner)));
+        classInfos.add(ClassInfo.forName(obfInfo.owner));
 
         while (!classInfos.isEmpty()) {
             ClassInfo c = classInfos.remove();
@@ -203,19 +203,19 @@ public final class RemappingReferenceMapper implements IReferenceMapper {
             return remappedCached;
         } else {
             String remapped = origInfoString;
-            if (remapped.charAt(0) == 'L') {
+            if (remapped.charAt(0) != 'L' || remapped.indexOf(';') != (remapped.length() - 1)) {
                 // To handle propagation, find super/itf-class (for IRemapper)
                 // but pass the requested class in the MemberInfo
                 MemberInfo info = MemberInfo.parse(remapped);
                 if (info.isField()) {
-                    String obfOwner = findFieldOwner(info);
+                    String obfOwner = findFieldOwner(className, info);
                     remapped = new MemberInfo(
                             remapper.mapFieldName(obfOwner, info.name, info.desc),
                             remapper.map(info.owner),
                             remapper.mapDesc(info.desc)
                     ).toString();
                 } else {
-                    String obfOwner = findMethodOwner(info);
+                    String obfOwner = findMethodOwner(className, info);
                     remapped = new MemberInfo(
                             remapper.mapMethodName(obfOwner, info.name, info.desc),
                             remapper.map(info.owner),
@@ -223,7 +223,7 @@ public final class RemappingReferenceMapper implements IReferenceMapper {
                     ).toString();
                 }
             } else {
-                remapped = remapper.map(remapped);
+                remapped = remapper.map(remapped.substring(1, remapped.length() - 1).replace('/', '.'));
             }
             mappedReferenceCache.put(origInfoString, remapped);
             return remapped;

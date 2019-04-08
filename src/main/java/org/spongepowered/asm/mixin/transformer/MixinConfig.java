@@ -768,7 +768,7 @@ final class MixinConfig implements Comparable<MixinConfig>, IMixinConfig {
 //        if (remapped != null) {
 //            return remapped;
 //        }
-        return this.getReferenceMapper().remap(className, reference);
+        return this.getReferenceMapper().remap(className, "L" + reference.replace('.', '/') + ";");
     }
     
     /* (non-Javadoc)
