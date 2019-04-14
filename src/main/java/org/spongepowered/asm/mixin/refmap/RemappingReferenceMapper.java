@@ -163,7 +163,7 @@ public final class RemappingReferenceMapper implements IReferenceMapper {
                     ).toString();
                 }
             } else {
-                remapped = remapper.map(remapped.substring(1, remapped.length() - 1).replace('/', '.'));
+                remapped = "L" + remapper.map(remapped.substring(1, remapped.length() - 1).replace('/', '.')).replace('.', '/') + ";";
             }
             mappedReferenceCache.put(origInfoString, remapped);
             return remapped;
