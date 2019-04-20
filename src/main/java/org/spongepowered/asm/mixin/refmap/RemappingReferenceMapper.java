@@ -137,6 +137,10 @@ public final class RemappingReferenceMapper implements IReferenceMapper {
      */
     @Override
     public String remapWithContext(String context, String className, String reference) {
+        if (reference.isEmpty()) {
+            return reference;
+        }
+
         String origInfoString = this.refMap.remapWithContext(context, className, reference);
         String remappedCached = mappedReferenceCache.get(origInfoString);
         if (remappedCached != null) {
