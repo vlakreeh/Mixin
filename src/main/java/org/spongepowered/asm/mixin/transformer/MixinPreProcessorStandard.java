@@ -378,9 +378,6 @@ class MixinPreProcessorStandard {
         Method method = this.getSpecialMethod(mixinMethod, type);
         MethodNode target = context.findMethod(mixinMethod, annotation);
         if (target == null) {
-            if (type.isOverwrite) {
-                return false;
-            }
             target = context.findRemappedMethod(mixinMethod);
             if (target == null) {
                 throw new InvalidMixinException(this.mixin,
@@ -682,7 +679,9 @@ class MixinPreProcessorStandard {
             throw new RuntimeException(new ClassNotFoundException(methodNode.owner.replace('/', '.')));
         }
 
-        Method method = owner.findMethodInHierarchy(methodNode, SearchType.ALL_CLASSES, ClassInfo.INCLUDE_PRIVATE);
+        int includeStatic = (methodNode.getOpcode() == Opcodes.INVOKESTATIC
+                ? ClassInfo.INCLUDE_STATIC : 0);
+        Method method = owner.findMethodInHierarchy(methodNode, SearchType.ALL_CLASSES, ClassInfo.INCLUDE_PRIVATE | includeStatic);
         metaTimer.end();
         
         if (method != null && method.isRenamed()) {
@@ -696,8 +695,10 @@ class MixinPreProcessorStandard {
         if (owner == null) {
             throw new RuntimeException(new ClassNotFoundException(fieldNode.owner.replace('/', '.')));
         }
-        
-        Field field = owner.findField(fieldNode, ClassInfo.INCLUDE_PRIVATE);
+
+        int includeStatic = ((fieldNode.getOpcode() == Opcodes.GETSTATIC || fieldNode.getOpcode() == Opcodes.PUTSTATIC)
+                ? ClassInfo.INCLUDE_STATIC : 0);
+        Field field = owner.findField(fieldNode, ClassInfo.INCLUDE_PRIVATE | includeStatic);
         metaTimer.end();
         
         if (field != null && field.isRenamed()) {
