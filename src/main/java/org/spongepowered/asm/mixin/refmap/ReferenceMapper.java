@@ -293,5 +293,4 @@ public final class ReferenceMapper implements IReferenceMapper, Serializable {
     private static ReferenceMapper readJson(Reader reader) {
         return new Gson().fromJson(reader, ReferenceMapper.class);
     }
-    
 }

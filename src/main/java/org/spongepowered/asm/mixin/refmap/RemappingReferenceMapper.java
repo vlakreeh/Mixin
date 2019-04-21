@@ -42,7 +42,7 @@ import java.util.Map;
  * This adapter is designed to apply the same remapping used elsewhere in
  * the development chain (RemapperChain) to reference maps.
  */
-public final class RemappingReferenceMapper implements IReferenceMapper {
+public final class RemappingReferenceMapper implements IClassReferenceMapper, IReferenceMapper {
     /**
      * Logger
      */
@@ -147,28 +147,26 @@ public final class RemappingReferenceMapper implements IReferenceMapper {
             return remappedCached;
         } else {
             String remapped = origInfoString;
-            if (remapped.charAt(0) != 'L' || remapped.indexOf(';') != (remapped.length() - 1)) {
-                // To handle propagation, find super/itf-class (for IRemapper)
-                // but pass the requested class in the MemberInfo
-                MemberInfo info = MemberInfo.parse(remapped);
-                if (info.name == null && info.desc == null) {
-                    return info.owner != null ? new MemberInfo(remapper.map(info.owner), null, null).toString() : info.toString();
-                } else if (info.isField()) {
-                    remapped = new MemberInfo(
-                            remapper.mapFieldName(info.owner, info.name, info.desc),
-                            info.owner == null ? null : remapper.map(info.owner),
-                            info.desc == null ? null : remapper.mapDesc(info.desc)
-                    ).toString();
-                } else {
-                    remapped = new MemberInfo(
-                            remapper.mapMethodName(info.owner, info.name, info.desc),
-                            info.owner == null ? null : remapper.map(info.owner),
-                            info.desc == null ? null : remapMethodDescriptor(remapper, info.desc)
-                    ).toString();
-                }
+
+            // To handle propagation, find super/itf-class (for IRemapper)
+            // but pass the requested class in the MemberInfo
+            MemberInfo info = MemberInfo.parse(remapped);
+            if (info.name == null && info.desc == null) {
+                return info.owner != null ? new MemberInfo(remapper.map(info.owner), null, null).toString() : info.toString();
+            } else if (info.isField()) {
+                remapped = new MemberInfo(
+                        remapper.mapFieldName(info.owner, info.name, info.desc),
+                        info.owner == null ? null : remapper.map(info.owner),
+                        info.desc == null ? null : remapper.mapDesc(info.desc)
+                ).toString();
             } else {
-                remapped = "L" + remapper.map(remapped.substring(1, remapped.length() - 1).replace('/', '.')).replace('.', '/') + ";";
+                remapped = new MemberInfo(
+                        remapper.mapMethodName(info.owner, info.name, info.desc),
+                        info.owner == null ? null : remapper.map(info.owner),
+                        info.desc == null ? null : remapMethodDescriptor(remapper, info.desc)
+                ).toString();
             }
+
             mappedReferenceCache.put(origInfoString, remapped);
             return remapped;
         }
@@ -189,4 +187,19 @@ public final class RemappingReferenceMapper implements IReferenceMapper {
         return refMap;
     }
 
+    @Override
+    public String remapClassName(String className, String inputClassName) {
+        return remapClassNameWithContext(getContext(), className, inputClassName);
+    }
+
+    @Override
+    public String remapClassNameWithContext(String context, String className, String remapped) {
+        String origInfoString;
+        if (this.refMap instanceof IClassReferenceMapper) {
+            origInfoString = ((IClassReferenceMapper) this.refMap).remapClassNameWithContext(context, className, remapped);
+        } else {
+            origInfoString = this.refMap.remapWithContext(context, className, remapped);
+        }
+        return remapper.map(origInfoString.replace('/', '.'));
+    }
 }
