@@ -68,7 +68,7 @@ public abstract class JavaVersion {
             } else {
                 matcher = patternOld.matcher(version);
                 if (matcher.find()) {
-                    current = Integer.parseInt(matcher.group(2));
+                    current = Integer.parseInt(matcher.group(1));
                     if (current >= 1) {
                         return current;
                     }
