@@ -594,42 +594,38 @@ public final class MixinEnvironment implements ITokenProvider {
         /**
          * Java 7 and above
          */
-        JAVA_7(7, Opcodes.V1_7, false) {
-
-            @Override
-            boolean isSupported() {
-                return JavaVersion.current() >= 1.7;
-            }
-            
-        },
+        JAVA_7(7, Opcodes.V1_7, false),
         
         /**
          * Java 8 and above
          */
-        JAVA_8(8, Opcodes.V1_8, true) {
-
-            @Override
-            boolean isSupported() {
-                return JavaVersion.current() >= 1.8;
-            }
-            
-        },
+        JAVA_8(8, Opcodes.V1_8, true),
         
         /**
          * Java 9 and above
          */
-        JAVA_9(9, CompatibilityLevel.CLASS_V1_9, true) {
-            
-            @Override
-            boolean isSupported() {
-                return false;
-            }
-            
-        };
-        
-        // Temp, until ASM supports Java 9
-        private static final int CLASS_V1_9 = 0 << 16 | 53;
-        
+        JAVA_9(9, Opcodes.V9, true),
+
+        /**
+         * Java 9 and above
+         */
+        JAVA_10(10, Opcodes.V10, true),
+
+        /**
+         * Java 9 and above
+         */
+        JAVA_11(11, Opcodes.V11, true),
+
+        /**
+         * Java 12 and above
+         */
+        JAVA_12(12, Opcodes.V12, true),
+
+        /**
+         * Java 13 and above
+         */
+        JAVA_13(13, Opcodes.V13, true);
+
         private final int ver;
         
         private final int classVersion;
@@ -654,7 +650,13 @@ public final class MixinEnvironment implements ITokenProvider {
          * environment
          */
         boolean isSupported() {
-            return true;
+            int version = JavaVersion.current();
+            if (version <= 0) {
+                JavaVersion.warnUnrecognized(logger);
+                return ver <= 6; // assume Java 1.6+
+            } else {
+                return ver <= version;
+            }
         }
         
         /**

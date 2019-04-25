@@ -24,6 +24,8 @@
  */
 package org.spongepowered.asm.util;
 
+import org.apache.logging.log4j.Logger;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,28 +33,50 @@ import java.util.regex.Pattern;
  * Small helper to resolve the current java version
  */
 public abstract class JavaVersion {
-    
-    private static double current = 0.0;
+    private static final Pattern patternOld = Pattern.compile("^1\\.([0-9]+)");
+    private static final Pattern patternNew = Pattern.compile("^([0-9]+)");
+    private static int current = -1;
+    private static boolean warned = false;
     
     private JavaVersion() {}
-    
+
+    public static void warnUnrecognized(Logger logger) {
+        if (!warned) {
+            logger.warn("Could not recognize Java version: " + System.getProperty("java.version"));
+            warned = true;
+        }
+    }
+
     /**
      * Get the current java version, calculates if necessary
      */
-    public static double current() {
-        if (JavaVersion.current == 0.0) {
+    public static int current() {
+        if (JavaVersion.current < 0) {
             JavaVersion.current = JavaVersion.resolveCurrentVersion();
         }
         return JavaVersion.current;
     }
 
-    private static double resolveCurrentVersion() {
+    private static int resolveCurrentVersion() {
         String version = System.getProperty("java.version");
-        Matcher matcher = Pattern.compile("[0-9]+\\.[0-9]+").matcher(version);
+
+        Matcher matcher = patternNew.matcher(version);
         if (matcher.find()) {
-            return Double.parseDouble(matcher.group());
+            current = Integer.parseInt(matcher.group(1));
+            if (current > 1) {
+                return current;
+            } else {
+                matcher = patternOld.matcher(version);
+                if (matcher.find()) {
+                    current = Integer.parseInt(matcher.group(2));
+                    if (current >= 1) {
+                        return current;
+                    }
+                }
+            }
         }
-        return 1.6;
+
+        return 0; // fallback
     }
 
 }
