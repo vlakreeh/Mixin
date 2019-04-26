@@ -50,6 +50,7 @@ import org.spongepowered.asm.service.ILegacyClassTransformer;
 import org.spongepowered.asm.service.IMixinService;
 import org.spongepowered.asm.service.ITransformer;
 import org.spongepowered.asm.service.MixinService;
+import org.spongepowered.asm.util.CompareUtil;
 import org.spongepowered.asm.util.ITokenProvider;
 import org.spongepowered.asm.util.JavaVersion;
 import org.spongepowered.asm.util.PrettyPrinter;
@@ -736,13 +737,11 @@ public final class MixinEnvironment implements ITokenProvider {
 
         @Override
         public int compareTo(TokenProviderWrapper other) {
-            if (other == null) {
-                return 0;
-            }
             if (other.priority == this.priority) {
-                return other.order - this.order;
+                return CompareUtil.compare(other.order, this.order);
+            } else {
+                return (other.priority < this.priority) ? -1 : 1;
             }
-            return (other.priority - this.priority);
         }
         
         public IEnvironmentTokenProvider getProvider() {

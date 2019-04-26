@@ -30,6 +30,7 @@ import java.util.Map;
 
 import org.spongepowered.asm.lib.tree.AbstractInsnNode;
 import org.spongepowered.asm.util.Bytecode;
+import org.spongepowered.asm.util.CompareUtil;
 
 /**
  * Used to keep track of instruction nodes in a {@link Target} method which are
@@ -197,7 +198,7 @@ public class InjectionNodes extends ArrayList<InjectionNodes.InjectionNode> {
          */
         @Override
         public int compareTo(InjectionNode other) {
-            return other == null ? Integer.MAX_VALUE : this.hashCode() - other.hashCode();
+            return other == null ? Integer.MAX_VALUE : CompareUtil.compare(this.hashCode(), other.hashCode());
         }
         
         /* (non-Javadoc)

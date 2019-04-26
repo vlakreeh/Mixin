@@ -59,6 +59,7 @@ import org.spongepowered.asm.mixin.refmap.RemappingReferenceMapper;
 import org.spongepowered.asm.mixin.transformer.throwables.InvalidMixinException;
 import org.spongepowered.asm.service.IMixinService;
 import org.spongepowered.asm.service.MixinService;
+import org.spongepowered.asm.util.CompareUtil;
 import org.spongepowered.asm.util.VersionNumber;
 
 import com.google.gson.Gson;
@@ -880,9 +881,10 @@ final class MixinConfig implements Comparable<MixinConfig>, IMixinConfig {
             return 0;
         }
         if (other.priority == this.priority) {
-            return this.order - other.order;
+            return CompareUtil.compare(this.order, other.order);
+        } else {
+            return (this.priority < other.priority) ? -1 : 1;
         }
-        return (this.priority - other.priority);
     }
 
     /**
