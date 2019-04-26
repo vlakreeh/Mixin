@@ -608,12 +608,12 @@ public final class MixinEnvironment implements ITokenProvider {
         JAVA_9(9, Opcodes.V9, true),
 
         /**
-         * Java 9 and above
+         * Java 10 and above
          */
         JAVA_10(10, Opcodes.V10, true),
 
         /**
-         * Java 9 and above
+         * Java 11 and above
          */
         JAVA_11(11, Opcodes.V11, true),
 
@@ -625,7 +625,19 @@ public final class MixinEnvironment implements ITokenProvider {
         /**
          * Java 13 and above
          */
-        JAVA_13(13, Opcodes.V13, true);
+        JAVA_13(13, Opcodes.V13, true),
+
+        /**
+         * Java 14 and above
+         */
+        JAVA_14(14, CompatibilityLevel.CLASS_V14, true) {
+            @Override
+            boolean isSupported() {
+                return false;
+            }
+        };
+
+        private static final int CLASS_V14 = 58;
 
         private final int ver;
         
