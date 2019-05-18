@@ -200,6 +200,6 @@ public final class RemappingReferenceMapper implements IClassReferenceMapper, IR
         } else {
             origInfoString = this.refMap.remapWithContext(context, className, remapped);
         }
-        return remapper.map(origInfoString.replace('/', '.'));
+        return remapper.map(origInfoString.replace('.', '/'));
     }
 }
