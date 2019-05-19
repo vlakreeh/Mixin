@@ -106,7 +106,9 @@ dependencies {
 
 // Task to read ASM library and rename packages
 task renamedASM {
-    outputs.file files(configurations.asm.files.withIndex().collect { file, i -> def dep = configurations.asm.dependencies[i]
+    def indexMap = [:]
+    outputs.file files(configurations.asm.files.withIndex().collect { file, i -> def dep = configurations.asm.dependencies.find { dep -> file.name == dep.name + "-" + dep.version + ".jar" }
+        indexMap["mixin-" + file.name] = i
         new File(new File(renamedPackageRoot, "org/spongepowered/mixin-" + dep.name + "/" + dep.version), "mixin-" + file.name).path
     })
     ant {
@@ -115,7 +117,8 @@ task renamedASM {
             classname: "com.tonicsystems.jarjar.JarJarTask",
             classpath: configurations.jarjar.asPath,
         )
-        outputs.files.eachWithIndex { elem, index ->
+        outputs.files.eachWithIndex { elem, _ ->
+            def index = indexMap[elem.name]
             logger.info "Generating renamed jar {}", elem.name
             def inJar = configurations.asm.files[index]
             if (elem.name.contains("sources")) {
@@ -156,8 +159,8 @@ task renamedASM {
     project.dependencies.add('agentCompile', 'org.spongepowered:mixin-asm-commons:7.1')
     project.dependencies.add('agentCompile', 'org.spongepowered:mixin-asm-tree:7.1')
     project.dependencies.add('agentCompile', 'org.spongepowered:mixin-asm-util:7.1')
-
 }
+compileJava.dependsOn(renamedASM)
 eclipseClasspath.dependsOn(renamedASM)
 
 // Project dependencies
