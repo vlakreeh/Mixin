@@ -147,7 +147,7 @@ public class RuntimeDecompiler extends IFernflowerLogger implements IDecompiler,
     }
 
     @Override
-    public void saveClassEntry(String path, String archiveName, String qualifiedName, String entryName, String content, int[] lineNumberCache) {
+    public void saveClassEntry(String path, String archiveName, String qualifiedName, String entryName, String content) {
     }
 
     @Override

@@ -24,8 +24,6 @@
  */
 package org.spongepowered.asm.util;
 
-import java.util.Optional;
-
 /**
  * Utility methods for obfuscation tasks
  */
@@ -88,11 +86,11 @@ public abstract class ObfuscationUtil {
             if (token != null) {
                 if (c == ';') {
                     String tokenStr = token.toString();
-                    Optional<String> remappedStr = ObfuscationUtil.remap(tokenStr, remapper, unmap);
-                    if (remappedStr.isPresent()) {
+                    String remappedStr = ObfuscationUtil.remap(tokenStr, remapper, unmap);
+                    if (remappedStr != null) {
                         remapped = true;
                     }
-                    sb.append('L').append(remappedStr.orElse(tokenStr)).append(';');
+                    sb.append('L').append(remappedStr != null ? remappedStr : tokenStr).append(';');
                     token = null;
                 } else {
                     token.append(c);
@@ -113,9 +111,9 @@ public abstract class ObfuscationUtil {
         return remapped ? sb.toString() : null;
     }
 
-    private static Optional<String> remap(String typeName, IClassRemapper remapper, boolean unmap) {
+    private static String remap(String typeName, IClassRemapper remapper, boolean unmap) {
         String result = unmap ? remapper.unmap(typeName) : remapper.map(typeName);
-        return Optional.ofNullable(result);
+        return result;
     }
 
 }
