@@ -107,7 +107,7 @@ dependencies {
 // Task to read ASM library and rename packages
 task renamedASM {
     def indexMap = [:]
-    outputs.file files(configurations.asm.files.withIndex().collect { file, i -> def dep = configurations.asm.dependencies.find { dep -> file.name == dep.name + "-" + dep.version + ".jar" }
+    outputs.file files(configurations.asm.files.sort { it.name }.withIndex().collect { file, i -> def dep = configurations.asm.dependencies.find { dep -> file.name == dep.name + "-" + dep.version + ".jar" }
         indexMap["mixin-" + file.name] = i
         new File(new File(renamedPackageRoot, "org/spongepowered/mixin-" + dep.name + "/" + dep.version), "mixin-" + file.name).path
     })
@@ -289,21 +289,22 @@ jar {
     // from sourceSets.launchwrapper.output
     
     // Renamed ASM
-    from zipTree(tasks.renamedASM.outputs.files[0]).matching {
+    from zipTree(tasks.renamedASM.outputs.files.sort { it.name }[0]).matching {
         include 'org/spongepowered/asm/lib/**'
     }
-    from zipTree(tasks.renamedASM.outputs.files[1]).matching {
+    from zipTree(tasks.renamedASM.outputs.files.sort { it.name }[1]).matching {
         include 'org/spongepowered/asm/lib/**'
     }
-    from zipTree(tasks.renamedASM.outputs.files[2]).matching {
+    from zipTree(tasks.renamedASM.outputs.files.sort { it.name }[2]).matching {
         include 'org/spongepowered/asm/lib/commons/*Remapper*'
         include 'org/spongepowered/asm/lib/commons/Remapper*'
         include 'org/spongepowered/asm/lib/commons/SignatureRemapper*'
+        include 'org/spongepowered/asm/lib/tree/analysis/**'
     }
-    from zipTree(tasks.renamedASM.outputs.files[3]).matching {
+    from zipTree(tasks.renamedASM.outputs.files.sort { it.name }[3]).matching {
         include 'org/spongepowered/asm/lib/**'
     }
-    from zipTree(tasks.renamedASM.outputs.files[4]).matching {
+    from zipTree(tasks.renamedASM.outputs.files.sort { it.name }[4]).matching {
         include 'org/spongepowered/asm/lib/**'
     }
     
@@ -331,21 +332,22 @@ jar {
 task thinJar(type: Jar) {
     from sourceSets.main.output
 
-    from zipTree(tasks.renamedASM.outputs.files[0]).matching {
+    from zipTree(tasks.renamedASM.outputs.files.sort { it.name }[0]).matching {
         include 'org/spongepowered/asm/lib/**'
     }
-    from zipTree(tasks.renamedASM.outputs.files[1]).matching {
+    from zipTree(tasks.renamedASM.outputs.files.sort { it.name }[1]).matching {
         include 'org/spongepowered/asm/lib/**'
     }
-    from zipTree(tasks.renamedASM.outputs.files[2]).matching {
+    from zipTree(tasks.renamedASM.outputs.files.sort { it.name }[2]).matching {
         include 'org/spongepowered/asm/lib/commons/*Remapper*'
         include 'org/spongepowered/asm/lib/commons/Remapper*'
         include 'org/spongepowered/asm/lib/commons/SignatureRemapper*'
+        include 'org/spongepowered/asm/lib/tree/analysis/**'
     }
-    from zipTree(tasks.renamedASM.outputs.files[3]).matching {
+    from zipTree(tasks.renamedASM.outputs.files.sort { it.name }[3]).matching {
         include 'org/spongepowered/asm/lib/**'
     }
-    from zipTree(tasks.renamedASM.outputs.files[4]).matching {
+    from zipTree(tasks.renamedASM.outputs.files.sort { it.name }[4]).matching {
         include 'org/spongepowered/asm/lib/**'
     }
 
