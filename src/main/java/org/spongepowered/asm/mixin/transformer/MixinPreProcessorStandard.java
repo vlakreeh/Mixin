@@ -29,12 +29,14 @@ import java.util.Iterator;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.spongepowered.asm.lib.Handle;
 import org.spongepowered.asm.lib.Opcodes;
 import org.spongepowered.asm.lib.Type;
 import org.spongepowered.asm.lib.tree.AbstractInsnNode;
 import org.spongepowered.asm.lib.tree.AnnotationNode;
 import org.spongepowered.asm.lib.tree.FieldInsnNode;
 import org.spongepowered.asm.lib.tree.FieldNode;
+import org.spongepowered.asm.lib.tree.InvokeDynamicInsnNode;
 import org.spongepowered.asm.lib.tree.MethodInsnNode;
 import org.spongepowered.asm.lib.tree.MethodNode;
 import org.spongepowered.asm.mixin.Dynamic;
@@ -47,6 +49,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.gen.Invoker;
 import org.spongepowered.asm.mixin.gen.throwables.InvalidAccessorException;
+import org.spongepowered.asm.mixin.struct.MemberRef;
 import org.spongepowered.asm.mixin.transformer.ClassInfo.Field;
 import org.spongepowered.asm.mixin.transformer.ClassInfo.Method;
 import org.spongepowered.asm.mixin.transformer.ClassInfo.SearchType;
@@ -667,42 +670,57 @@ class MixinPreProcessorStandard {
                     this.transformMethod((MethodInsnNode)insn);
                 } else if (insn instanceof FieldInsnNode) {
                     this.transformField((FieldInsnNode)insn);
+                } else if (insn instanceof InvokeDynamicInsnNode) {
+                    this.transformInvokeDynamic((InvokeDynamicInsnNode)insn);
                 }
             }
         }
     }
 
-    protected void transformMethod(MethodInsnNode methodNode) {
-        Section metaTimer = this.profiler.begin("meta");
-        ClassInfo owner = ClassInfo.forName(methodNode.owner);
-        if (owner == null) {
-            throw new RuntimeException(new ClassNotFoundException(methodNode.owner.replace('/', '.')));
-        }
+    protected void transformInvokeDynamic(InvokeDynamicInsnNode invokeDynamicNode) {
+        MemberRef.Handle ref = new MemberRef.Handle(invokeDynamicNode.bsm);
+        transformMemberReference(ref);
+        invokeDynamicNode.bsm = ref.getMethodHandle();
 
-        int includeStatic = (methodNode.getOpcode() == Opcodes.INVOKESTATIC
-                ? ClassInfo.INCLUDE_STATIC : 0);
-        Method method = owner.findMethodInHierarchy(methodNode, SearchType.ALL_CLASSES, ClassInfo.INCLUDE_PRIVATE | includeStatic);
-        metaTimer.end();
-        
-        if (method != null && method.isRenamed()) {
-            methodNode.name = method.getName();
+        for (int i = 0; i < invokeDynamicNode.bsmArgs.length; i++) {
+            if (invokeDynamicNode.bsmArgs[i] instanceof Handle) {
+                ref = new MemberRef.Handle((Handle) invokeDynamicNode.bsmArgs[i]);
+                transformMemberReference(ref);
+                invokeDynamicNode.bsmArgs[i] = ref.getMethodHandle();
+            }
         }
     }
 
+    protected void transformMethod(MethodInsnNode methodNode) {
+        MemberRef.Method ref = new MemberRef.Method(methodNode);
+        transformMemberReference(ref);
+    }
+
     protected void transformField(FieldInsnNode fieldNode) {
-        Section metaTimer = this.profiler.begin("meta");
-        ClassInfo owner = ClassInfo.forName(fieldNode.owner);
+        MemberRef.Field ref = new MemberRef.Field(fieldNode);
+        transformMemberReference(ref);
+    }
+
+    protected void transformMemberReference(MemberRef ref) {
+        ClassInfo owner = ClassInfo.forName(ref.getOwner());
+        ClassInfo.Member member;
+
         if (owner == null) {
-            throw new RuntimeException(new ClassNotFoundException(fieldNode.owner.replace('/', '.')));
+            throw new RuntimeException(new ClassNotFoundException(ref.getOwner().replace('/', '.')));
         }
 
-        int includeStatic = ((fieldNode.getOpcode() == Opcodes.GETSTATIC || fieldNode.getOpcode() == Opcodes.PUTSTATIC)
-                ? ClassInfo.INCLUDE_STATIC : 0);
-        Field field = owner.findField(fieldNode, ClassInfo.INCLUDE_PRIVATE | includeStatic);
-        metaTimer.end();
-        
-        if (field != null && field.isRenamed()) {
-            fieldNode.name = field.getName();
+        if (ref.isField()) {
+            int includeStatic = ((ref.getOpcode() == Opcodes.GETSTATIC || ref.getOpcode() == Opcodes.PUTSTATIC)
+                    ? ClassInfo.INCLUDE_STATIC : 0);
+            member = owner.findField(ref.getName(), ref.getDesc(), ClassInfo.INCLUDE_PRIVATE | includeStatic);
+        } else {
+            int includeStatic = (ref.getOpcode() == Opcodes.INVOKESTATIC
+                    ? ClassInfo.INCLUDE_STATIC : 0);
+            member = owner.findMethodInHierarchy(ref.getName(), ref.getDesc(), SearchType.ALL_CLASSES, ClassInfo.Traversal.NONE, ClassInfo.INCLUDE_PRIVATE | includeStatic);
+        }
+
+        if (member != null && member.isRenamed()) {
+            ref.setName(member.getName());
         }
     }
     
