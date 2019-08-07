@@ -12,7 +12,7 @@ plugins {
 defaultTasks 'licenseFormat', 'check', 'build'
 
 // Basic project information
-group = 'net.fabricmc'
+group = 'website.zeb'
 archivesBaseName = 'sponge-mixin'
 version = buildVersion
 
@@ -286,7 +286,7 @@ jar {
     from sourceSets.bridge.output
     
     // Launchwrapper - no longer used - provided by Knot in Fabric!
-    // from sourceSets.launchwrapper.output
+    from sourceSets.launchwrapper.output
     
     // Renamed ASM
     from zipTree(tasks.renamedASM.outputs.files.sort { it.name }[0]).matching {
